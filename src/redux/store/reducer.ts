@@ -4,7 +4,7 @@ import { TUserReducerAction, TUsers, userReducer } from "./reducer/userReducer"
 
 export interface TDefaultAction {
     type: string
-    payload?: { [k in string]: any }
+    payload?: Record<string, any>
 }
 
 export type TAction =
@@ -12,7 +12,9 @@ export type TAction =
     | TGrafReducerAction
 
 type TState = {
+    /** массив юзеров для таблицы */
     users: TUsers
+    /** данные для отображения графиков */
     graph: TGraph
 }
 
