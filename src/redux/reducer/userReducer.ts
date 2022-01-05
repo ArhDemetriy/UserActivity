@@ -1,8 +1,8 @@
-import { TDefaultAction } from "../reducer"
+import { TAction, TDefaultAction } from "../reducer"
 
 export const ADD_USERS = 'ADD_USERS'
 
-export function userReducer(users: TUsers, action: TUserReducerAction) {
+export function userReducer(users: TUsers, action: TAction) {
     if (action.type == ADD_USERS) {
         return users.concat(action.payload.users)
     }
@@ -24,7 +24,5 @@ type TUser = {
     registration: Date
     lastActivity: Date
 }
-
-
 
 export default userReducer

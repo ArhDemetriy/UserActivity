@@ -1,5 +1,5 @@
 import { Reducer } from "redux"
-import { grafReducer, TGraph } from "./reducer/grafReducer"
+import { grafReducer, TGrafReducerAction, TGraph } from "./reducer/grafReducer"
 import { TUserReducerAction, TUsers, userReducer } from "./reducer/userReducer"
 
 export interface TDefaultAction {
@@ -7,10 +7,9 @@ export interface TDefaultAction {
     payload?: { [k in string]: any }
 }
 
-type TAction =
+export type TAction =
     | TUserReducerAction
-    // | TDefaultAction
-
+    | TGrafReducerAction
 
 type TState = {
     users: TUsers
@@ -19,7 +18,10 @@ type TState = {
 
 const defaultState: TState = {
     users: [],
-    graph: [],
+    graph: {
+        histogram: [],
+        spline: [],
+    },
 }
 
 export const reducer: Reducer<TState, TAction> = (state = defaultState, action) => {
