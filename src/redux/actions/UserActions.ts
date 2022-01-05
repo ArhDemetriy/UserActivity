@@ -1,5 +1,5 @@
 import { store } from "../store";
-import { REPLACE_HISTOGRAM, REPLACE_SPLINE, TGrafReducerAction } from "../reducer/grafReducer";
+import { REPLACE_HISTOGRAM, REPLACE_SPLINE, TGrafReducerAction } from "../store/reducer/grafReducer";
 
 /** диспатчеры store.getState().graph */
 export class GraphActions {
