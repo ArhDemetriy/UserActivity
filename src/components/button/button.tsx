@@ -1,6 +1,6 @@
 import React from 'react';
 import { IBasicProps } from '../../types/reactComponents/basic';
-import './button/button.scss';
+import './button.scss';
 
 interface ButtonProps extends IBasicProps{
     type?: React.ButtonHTMLAttributes<HTMLButtonElement>['type']
