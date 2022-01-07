@@ -1,3 +1,5 @@
+@import "/src/globalScss/globalColors";
+
 .user{
     &-item{
         padding: 1rem 2rem;
@@ -7,6 +9,19 @@
         }
         &_last {
             border-radius: 0 5px 5px 0;
+        }
+        &-input{
+            border: none;
+            padding: 0;
+            width: max-content;
+            &:invalid, &_invalid {
+                color: #{color-invalid()};
+            }
+            &_clear{
+                -webkit-appearance: textfield;
+                -moz-appearance: textfield;
+                appearance: textfield;
+            }
         }
     }
 }

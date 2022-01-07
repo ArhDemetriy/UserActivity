@@ -3,7 +3,7 @@ import { TAction, TDefaultAction } from "../reducer"
 export const ADD_USERS = 'ADD_USERS'
 
 export function userReducer(users: TUsers, action: TAction) {
-    if (action.type == ADD_USERS) {
+    if (action.type === ADD_USERS) {
         return users.concat(action.payload.users)
     }
     return users

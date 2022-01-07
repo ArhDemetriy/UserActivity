@@ -37,13 +37,13 @@ $main-color-tone: var(--hsl-l, 223) !default;
 }
 
 // rgb(92, 220, 112)
-@function color-positive($alfa: 1) {
+@function color-valid($alfa: 1) {
   @if $alfa == 1 { @return rgb(92, 220, 112); }
   @return rgba(92, 220, 112, $alfa);
 }
 
 // rgb(255, 17, 17)
-@function color-negative($alfa: 1) {
+@function color-invalid($alfa: 1) {
   @if $alfa == 1 { @return rgb(255, 17, 17); }
   @return rgba(255, 17, 17, $alfa);
 }

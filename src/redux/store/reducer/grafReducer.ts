@@ -5,10 +5,10 @@ export const REPLACE_SPLINE = 'REPLACE_SPLINE'
 
 export function grafReducer(graph: TGraph, action: TAction): TGraph {
 
-    if (action.type == REPLACE_HISTOGRAM && action.payload.histogram ) {
+    if (action.type === REPLACE_HISTOGRAM && action.payload.histogram ) {
         return { ...graph, histogram: action.payload.histogram }
 
-    } else if (action.type == REPLACE_SPLINE && action.payload.spline) {
+    } else if (action.type === REPLACE_SPLINE && action.payload.spline) {
         return { ...graph, spline: action.payload.spline }
     }
 
