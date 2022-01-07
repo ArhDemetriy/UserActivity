@@ -1,3 +1,21 @@
+@import "/src/globalScss/globalColors";
+
 .table{
-    background-color: white;
+    border-spacing: 0 Max(2px, .1rem);
+    &-caption{
+        color: #{color-focus(.4)};
+        text-align: left;
+        text-transform: uppercase;
+        font-size: 1.429rem;
+    }
+    &-head{
+        text-align: left;
+        color: #{color-focus(.4)};
+        text-transform: uppercase;
+        &-item{
+            padding: 1rem 2rem;
+        }
+    }
+    &-body{
+    }
 }

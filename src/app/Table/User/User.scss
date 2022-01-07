@@ -1,0 +1,12 @@
+.user{
+    &-item{
+        padding: 1rem 2rem;
+        background-color: white;
+        &_first {
+            border-radius: 5px 0 0 5px ;
+        }
+        &_last {
+            border-radius: 0 5px 5px 0;
+        }
+    }
+}
