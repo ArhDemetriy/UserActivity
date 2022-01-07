@@ -1,10 +1,34 @@
 import { store } from "../store";
-import { ADD_USERS, TUserReducerAction } from "../store/reducer/userReducer";
+import { REPLACE_HISTOGRAM, REPLACE_SPLINE, TGrafReducerAction } from "../store/reducer/grafReducer";
 
-export class UserActions {
-    static setUser(payload: TUserReducerAction['payload']) {
+/** диспатчеры store.getState().graph */
+export class GraphActions {
+
+    // histogram
+
+    /** замена точек гистограммы */
+    static replaceHistogram(payload: Required<Pick<TGrafReducerAction['payload'], 'histogram'>>) {
         store.dispatch({
-            type: ADD_USERS,
+            type: REPLACE_HISTOGRAM,
+            payload,
+        })
+    }
+
+    /** добавление точек в конец гистограммы */
+    static pushHistogramBins(payload: Required<TGrafReducerAction['payload']>['histogram'][0][]) {
+        const histogram = store.getState().graph.histogram.concat(payload)
+
+        store.dispatch({
+            type: REPLACE_HISTOGRAM,
+            payload: { histogram },
+        })
+    }
+
+    // spline
+
+    static replaceSpline(payload: Required<Pick<TGrafReducerAction['payload'], 'spline'>>) {
+        store.dispatch({
+            type: REPLACE_SPLINE,
             payload,
         })
     }
