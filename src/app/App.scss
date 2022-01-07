@@ -5,4 +5,9 @@
   flex-direction: column;
   align-items: center;
   gap: Min(21px, 1.5rem);
+  &-data{
+    display: flex;
+    justify-content: space-between;
+    gap: Min(21px, 1.5rem);
+  }
 }

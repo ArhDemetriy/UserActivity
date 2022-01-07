@@ -1,0 +1,9 @@
+.graph{
+    background-color: red;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: Min(21px, 1.5rem);
+}
