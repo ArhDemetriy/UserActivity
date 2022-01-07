@@ -11,7 +11,7 @@ export type TAction =
     | TUserReducerAction
     | TGrafReducerAction
 
-type TState = {
+export type TState = {
     /** массив юзеров для таблицы */
     users: TUsers
     /** данные для отображения графиков */

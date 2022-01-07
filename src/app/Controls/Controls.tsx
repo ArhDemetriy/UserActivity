@@ -3,6 +3,11 @@ import { Button } from '../../components/button/button';
 import './Controls.scss';
 
 export const Controls: React.FC = () => {
+
+    function addUser() {
+
+    }
+
     return <div className="controls">
         <Button
             requireCssClass='controls-button_add'
