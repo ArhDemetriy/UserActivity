@@ -16,6 +16,7 @@
 body {
   margin: 0;
   background-color: #{color-background()};
+  background-color: black;
 }
 
 code {
@@ -30,4 +31,9 @@ input, button {
 
 * {
   box-sizing: border-box;
+}
+
+#root{
+  display: flex;
+  flex-direction: column;
 }
