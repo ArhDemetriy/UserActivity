@@ -9,13 +9,17 @@ export function userReducer(users: TUsers, action: TAction) {
     return users
 }
 
+/** поле в redux. Этот тип можно модифицировать */
 export type TUsers = TUser[]
+
+/** просто массив юзеров. Этот тип нельзя модифицировать */
+export type ArrayOfUser = TUser[]
 
 export interface TUserReducerAction extends TDefaultAction {
     type: typeof ADD_USERS
     payload: {
         // это не TUsers, этот тип не обязан меняться при изменении TUsers
-        users: TUser[]
+        users: ArrayOfUser
     }
 }
 
