@@ -1,7 +1,8 @@
 import React from 'react';
-import { addUser } from './AddUser/AddUser';
 import './Controls.scss';
 import './button/button.scss';
+import { save } from './EventHandlers/Save';
+import { addUser } from './EventHandlers/AddUser';
 
 export const Controls: React.FC = () => {
     return <div
@@ -11,10 +12,11 @@ export const Controls: React.FC = () => {
             className='controls-button_add button'
             type='button'
             onClick={addUser}
-        >Add</button>
+            >Add</button>
         <button
             className='controls-button_save button'
             type='submit'
+            onClick={save}
         >Save</button>
         <button
             className='controls-button_calculate button'
@@ -24,4 +26,3 @@ export const Controls: React.FC = () => {
 }
 
 export default Controls
-
