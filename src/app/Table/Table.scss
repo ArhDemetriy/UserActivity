@@ -2,6 +2,7 @@
 
 .table{
     border-spacing: 0 Max(2px, .1rem);
+    empty-cells: hide;
     &-caption{
         color: #{color-focus(.4)};
         text-align: left;
