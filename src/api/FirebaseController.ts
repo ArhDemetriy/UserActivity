@@ -4,10 +4,10 @@ import { Firebase } from "./FirebaseController/Firebase";
 const USERS = 'users'
 
 export class FirebaseController{
-
     /** загружает и возвращает данные из коллекции users */
     public static load() {
         return Firebase.getDocs<TBdUsers[0]>(USERS)
+            .then(bdUsers => bdUsers.sort((a, b) => a.id - b.id))
     }
 
     /** очищает коллекцию users и сохраняет в неё переданный массив */

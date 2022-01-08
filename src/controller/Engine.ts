@@ -22,7 +22,7 @@ export class Engine{
     public static tryLoad() {
         return FirebaseController.load()
             .then(bdUsers => convertToReduxUsers(bdUsers))
-            .then(reduxUsers => UserActions.addUsers(reduxUsers))
+            .then(reduxUsers => UserActions.replaceUsers(reduxUsers))
     }
 
     public static safetyLoad() {

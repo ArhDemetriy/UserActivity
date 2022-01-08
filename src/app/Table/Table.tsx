@@ -17,7 +17,11 @@ export const Table: React.FC = () => {
             </tr>
         </thead>
         <tbody className={"table-body"}>{
-            users.map((user, index) => <User requireCssClass='table-body-item' index={index} key={user.id} />)
+            users.map((user, index) => <User
+                requireCssClass='table-body-item'
+                index={index}
+                key={`table-${index}-${user.id}`}
+            />)
         }</tbody>
     </table>
 }

@@ -6,9 +6,9 @@ export class Firebase{
     // private static readonly app = app
 
     private static readonly selfFirestore = selfFirestore
-    // public static readonly firestore = firestore
+    public static readonly firestore = firestore
 
-    private static readonly collections: Map<string, ReturnType<typeof firestore['collection']>> = new Map
+    private static readonly collections: Map<string, ReturnType<typeof firestore['collection']>> = new Map()
     protected static getCollection(collectionName: string) {
         if (!this.collections.has(collectionName)) {
             this.collections.set(collectionName, firestore.collection(this.selfFirestore, collectionName))
