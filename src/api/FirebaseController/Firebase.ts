@@ -1,18 +1,11 @@
-import { initializeApp } from "firebase/app";
 import * as firestore from "firebase/firestore";
 import { DocumentData } from "firebase/firestore";
+import { selfFirestore } from "./Firebase/init";
 
 export class Firebase{
-    protected static readonly app = initializeApp({
-        apiKey: "AIzaSyAy2GjQAfutCFa3toa9WLDFTkMehtj_CNk",
-        authDomain: "useractivity-4c085.firebaseapp.com",
-        projectId: "useractivity-4c085",
-        storageBucket: "useractivity-4c085.appspot.com",
-        messagingSenderId: "1007647890248",
-        appId: "1:1007647890248:web:91e91fec7ca033ae29b17d"
-    })
+    // private static readonly app = app
 
-    private static readonly selfFirestore = firestore.getFirestore(Firebase.app)
+    private static readonly selfFirestore = selfFirestore
     // public static readonly firestore = firestore
 
     private static readonly collections: Map<string, ReturnType<typeof firestore['collection']>> = new Map
