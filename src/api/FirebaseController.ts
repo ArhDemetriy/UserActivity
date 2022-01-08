@@ -8,12 +8,16 @@ const enum Collections{
 }
 
 export class FirebaseController{
-    public static init() {
-        Firebase.init()
-        Engine.tryLoad()
-    }
 
+    /** загружает и возвращает данные из коллекции users */
     public static load() {
         return Firebase.getDocs<TBdUsers[0]>(Collections.users)
+    }
+
+    /** очищает коллекцию users и сохраняет в неё переданный массив */
+    public static saveAll(bdUsers: TBdUsers) {
+        return Firebase.deleteCollection(Collections.users)
+            .then(() => Promise.all(bdUsers
+                .map(bdUser => Firebase.add(Collections.users, bdUser))))
     }
 }

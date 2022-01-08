@@ -32,7 +32,7 @@ export class Firebase{
     }
 
     /** получает все документы коллекции, затем их все удаляет */
-    protected static deleteCollection(collection: string) {
+    public static deleteCollection(collection: string) {
         return this.getFirestoreDocs(collection)
         .then(result => result.docs.map(doc => doc.ref))
         .then(docRefs => docRefs.forEach(ref => firestore.deleteDoc(ref)))
@@ -45,7 +45,5 @@ export class Firebase{
                 .map(doc => doc.data() as T)
             )
     }
-
-    public static init() { }
 }
 

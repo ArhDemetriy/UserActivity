@@ -5,9 +5,9 @@ import App from './app/App';
 import reportWebVitals from './reportWebVitals';
 import { Provider } from 'react-redux';
 import { store } from './redux/store';
-import { FirebaseController } from './api/FirebaseController';
+import { Engine } from './controller/Engine';
 
-FirebaseController.init()
+Engine.init()
 
 ReactDOM.render(
   <React.StrictMode>
