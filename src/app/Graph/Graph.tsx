@@ -7,7 +7,6 @@ export const Graph: React.FC = () => {
         className="graph"
     >
         <Retention />
-
     </div>
 }
 

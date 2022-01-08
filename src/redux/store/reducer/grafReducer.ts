@@ -16,6 +16,7 @@ export function grafReducer(graph: TGraph, action: TAction): TGraph {
 }
 
 export type TGraph = {
+    retention: number
     /** высоты столбцов гистограммы */
     histogram: number[]
     /** точки сшивки кривых безье */

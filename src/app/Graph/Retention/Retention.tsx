@@ -4,12 +4,13 @@ import { TState } from '../../../redux/store/reducer';
 import './Retention.scss';
 
 export const Retention: React.FC = () => {
-    const users = useSelector((store: TState) => store.users, (left, right) => left.length === right.length)
+    const retention = useSelector((store: TState) => store.graph.retention)
+    if (!Number.isFinite(retention)) { return <div /> }
 
     return <div
         className="retention"
     >
-        {`users: ${users.length}`}
+        {`Rolling Retention 7 day: ${retention}`}
     </div>
 }
 

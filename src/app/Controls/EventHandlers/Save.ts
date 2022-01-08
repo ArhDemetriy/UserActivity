@@ -1,7 +1,7 @@
 import { Engine } from "../../../controller/Engine"
 
-export const save: React.MouseEventHandler<HTMLButtonElement> = function (event) {
-    Engine.trySave()
+export function save() {
+    return Engine.trySave()
         .then(() => Engine.tryLoad())
         .catch(e => console.error(e))
 }

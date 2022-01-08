@@ -21,6 +21,7 @@ export type TState = {
 const defaultState: TState = {
     users: [],
     graph: {
+        retention: NaN,
         histogram: [],
         spline: [],
     },

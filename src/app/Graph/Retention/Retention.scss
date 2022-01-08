@@ -1,3 +1,6 @@
-.retention{
+@import "/src/globalScss/globalColors";
 
+.retention{
+    background-color: #{color-background()};
+    padding: 1rem 2rem;
 }
