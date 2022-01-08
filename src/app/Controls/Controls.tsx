@@ -17,10 +17,11 @@ export const Controls: React.FC = () => {
             className='controls-button_save button'
             type='submit'
             onClick={save}
-        >Save</button>
+            >Save</button>
         <button
             className='controls-button_calculate button'
             type='button'
+            onClick={save}
         >Calculate</button>
     </div>
 }
