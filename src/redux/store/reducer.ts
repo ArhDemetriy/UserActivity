@@ -22,7 +22,10 @@ const defaultState: TState = {
     users: [],
     graph: {
         retention: NaN,
-        histogram: [],
+        histogram: {
+            bins: [],
+            maxBin: NaN,
+        },
         spline: [],
     },
 }
