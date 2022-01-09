@@ -20,7 +20,10 @@ export function grafReducer(graph: TGraph, action: TAction): TGraph {
 export type TGraph = {
     retention: number
     /** высоты столбцов гистограммы */
-    histogram: number[]
+    histogram: {
+        bins: number[]
+        maxBin: number
+    }
     /** точки сшивки кривых безье */
     spline: number[]
 }
