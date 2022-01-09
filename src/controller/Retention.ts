@@ -4,7 +4,8 @@ import { getUsers } from "./Engine/getters";
 export class Retention{
 
     public static calcRetention() {
-        GraphActions.setRetention(this.getRollingRetention(7))
+        const retention7 = this.getRollingRetention(7)
+        if (Number.isFinite(retention7)) { GraphActions.setRetention(retention7) }
     }
 
     /**
@@ -20,7 +21,9 @@ export class Retention{
         // а может лучше осчитывать интевал от момента регистрации, а не от начала дня регистрации?
         // буду считать что это полночь по гринвичу
 
-        if (days < 1) { return NaN }
+        // после округления интервал будет == 0. В результате чего в оба фильтра попадут все пользователи.
+        // поменять если из фильтров уберут нестрогие неравентства
+        if (days < 1) { return 1 }
 
         /** запрашиваемый интервал */
         const intervalTime = this.floorTime(this.getIntervalTime(days))
@@ -56,6 +59,7 @@ export class Retention{
             // но меня смущает постановка задачи, потому такую оптимизацию стоит делать после уточнения всех вопросов что тут написал
         }
 
+        // 0 / 0
         if (!news) { return NaN }
 
         return returns / news
