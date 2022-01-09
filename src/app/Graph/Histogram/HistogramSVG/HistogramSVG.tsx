@@ -7,40 +7,89 @@ interface HistogramSVGProps{
 }
 
 export const HistogramSVG: React.FC<HistogramSVGProps> = ({ height = 500 }) => {
-    // const maxBin = useSelector((store: TState) => store.graph.histogram.maxBin || 0)
+    const maxBin = useSelector((store: TState) => store.graph.histogram.maxBin || 0)
     const bins = useSelector((store: TState) => store.graph.histogram.bins)
     if (!Array.isArray(bins)) { return <svg /> }
 
     // const mainHeight = Math.round(maxBin * 1.5 + 20)
     const mainHeight = height
-    const PADDING = 10
+    const PADDING = 50
     const BAR_WIDTH = 10
     const GAP = 3
 
     const xStep = BAR_WIDTH + GAP
     const maxHeight = mainHeight - PADDING * 2
+    const mainWidth = bins.length * (BAR_WIDTH + GAP) + PADDING * 2
 
+    /** генерирует столбцы гистограмы. Они растут вверх отступая от нижней границы экрана и боков на PADDING */
     function getRects() {
         return bins.map((bin, i) => {
             const height = bin * maxHeight
-            return <rect
-            x={`${i * xStep + PADDING}`}
-            y={`${mainHeight - height - PADDING}`}
-                width={`${BAR_WIDTH}`}
-                height={`${height}`}
-                fill="#4A9DFF"
-                key={i}
-            />
+            return <g>
+                <rect
+                    x={`${i * xStep + PADDING}`}
+                    y={`${mainHeight - height - PADDING}`}
+                    width={`${BAR_WIDTH}`}
+                    height={`${height}`}
+                    key={i}
+                />
+                {(i % 5) || getText(i)}
+            </g>
         })
     }
 
-    const mainWidth = bins.length * (BAR_WIDTH + GAP) + PADDING * 2
+    function getText(i: number) {
+        return <text
+            x={`${i * xStep + PADDING + BAR_WIDTH / 2}`}
+            y={`${mainHeight - PADDING / 2}`}
+            textAnchor='middle'
+        >{`${i}`}</text>
+    }
+
+    function getYScale() {
+        const x = PADDING / 2
+        const half = maxBin / 2
+        const yTop = mainHeight - PADDING - maxHeight
+        const yMiddle = mainHeight - PADDING - maxHeight / 2
+        const yBottom = mainHeight - PADDING
+
+        return <g stroke="rgba(74, 157, 255, .4)">
+            <text x={`${x}`} textAnchor='middle'
+                y={`${yTop}`}
+            >{`${maxBin}`}</text>
+            <line x1={`${x}`}
+                x2={`${mainWidth - PADDING}`}
+                y1={`${yTop} `} y2={`${yTop}`}
+            />
+
+            <text x={`${x}`} textAnchor='middle'
+                y={`${yMiddle}`}
+            >{`${half}`}</text>
+            <line x1={`${x}`}
+                x2={`${mainWidth - PADDING}`}
+                y1={`${yMiddle} `} y2={`${yMiddle}`}
+            />
+
+            <text x={`${x}`} textAnchor='middle'
+                y={`${yBottom}`}
+            >0</text>
+            <line x1={`${x}`}
+                x2={`${mainWidth - PADDING}`}
+                y1={`${yBottom} `} y2={`${yBottom}`}
+            />
+        </g>
+    }
+
     return <svg
         width={`${mainWidth}`}
         height={`${mainHeight}`}
+        text-rendering="optimizeLegibility"
         version="1.1" xmlns="http://www.w3.org/2000/svg"
     >
-        {getRects()}
+        <g fill="#4A9DFF">
+            {getYScale()}
+            {getRects()}
+        </g>
     </svg>
 }
 
