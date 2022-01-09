@@ -7,7 +7,7 @@ import { Table } from './Table/Table';
 export const App: React.FC = () => {
   return <div className="app">
     <div className="app-data">
-      <Table />
+      {/* <Table /> */}
       <Graph />
     </div>
     <Controls />
