@@ -7,7 +7,7 @@ export const SET_RETENTION = 'SET_RETENTION'
 export function grafReducer(graph: TGraph, action: TAction): TGraph {
 
     if (action.type === REPLACE_HISTOGRAM && action.payload.histogram ) {
-        return { ...graph, histogram: action.payload.histogram }
+        return { ...graph, histogram: { ...graph.histogram, ...action.payload.histogram } }
     } else if (action.type === REPLACE_SPLINE && action.payload.spline) {
         return { ...graph, spline: action.payload.spline }
     } else if (action.type === SET_RETENTION && action.payload.retention !== undefined) {
@@ -19,9 +19,11 @@ export function grafReducer(graph: TGraph, action: TAction): TGraph {
 
 export type TGraph = {
     retention: number
-    /** высоты столбцов гистограммы */
+    /** высоты столбцов гистограмы */
     histogram: {
+        /** нормированные к 1 высоты столбцов гистограмы */
         bins: number[]
+        /** высота максимального не нормированного столбца */
         maxBin: number
     }
     /** точки сшивки кривых безье */

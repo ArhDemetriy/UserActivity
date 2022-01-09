@@ -2,16 +2,45 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { TState } from '../../../../redux/store/reducer';
 
-export const HistogramSVG: React.FC = () => {
-    // const maxBin = useSelector((store: TState) => store.graph.histogram.maxBin)
-    // const bins = useSelector((store: TState) => store.graph.histogram.bins)
-    // if (!Array.isArray(bins) || !bins.length) { return <svg /> }
-    // if (!Number.isFinite(maxBin) || maxBin < 0) { return <svg /> }
+interface HistogramSVGProps{
+    height?: number
+}
 
-    return <svg width="100" height="100" version="1.1" xmlns="http://www.w3.org/2000/svg">
+export const HistogramSVG: React.FC<HistogramSVGProps> = ({ height = 500 }) => {
+    // const maxBin = useSelector((store: TState) => store.graph.histogram.maxBin || 0)
+    const bins = useSelector((store: TState) => store.graph.histogram.bins)
+    if (!Array.isArray(bins)) { return <svg /> }
 
-        <rect x="10%" y="10" width="30%" height="30" stroke="transparent" fill="red"/>
-        <rect x="60" y="10" width="30" height="30" stroke="transparent" fill="red"/>
+    // const mainHeight = Math.round(maxBin * 1.5 + 20)
+    const mainHeight = height
+    const PADDING = 10
+    const BAR_WIDTH = 10
+    const GAP = 3
+
+    const xStep = BAR_WIDTH + GAP
+    const maxHeight = mainHeight - PADDING * 2
+
+    function getRects() {
+        return bins.map((bin, i) => {
+            const height = bin * maxHeight
+            return <rect
+            x={`${i * xStep + PADDING}`}
+            y={`${mainHeight - height - PADDING}`}
+                width={`${BAR_WIDTH}`}
+                height={`${height}`}
+                fill="#4A9DFF"
+                key={i}
+            />
+        })
+    }
+
+    const mainWidth = bins.length * (BAR_WIDTH + GAP) + PADDING * 2
+    return <svg
+        width={`${mainWidth}`}
+        height={`${mainHeight}`}
+        version="1.1" xmlns="http://www.w3.org/2000/svg"
+    >
+        {getRects()}
     </svg>
 }
 

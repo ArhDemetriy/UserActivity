@@ -16,24 +16,22 @@ export class GraphActions {
 
     // histogram
 
-    /** замена точек гистограмы */
-    static replaceHistogram(bins: Required<TGrafReducerAction['payload']>['histogram']['bins']) {
-        const maxBin = Math.max(...bins)
-
+    /** замена гистограмы */
+    static replaceHistogram(histogram: Required<TGrafReducerAction['payload']>['histogram']) {
         store.dispatch({
             type: REPLACE_HISTOGRAM,
-            payload: { histogram: { bins, maxBin } },
+            payload: { histogram },
         })
     }
 
     /** добавление точек в конец гистограмы */
     static pushHistogramBins(binsSlice: Required<TGrafReducerAction['payload']>['histogram']['bins']) {
-        const bins = store.getState().graph.histogram.bins.concat(binsSlice)
-        const maxBin = Math.max(...bins)
+        const histogram = store.getState().graph.histogram
+        const bins = histogram.bins.concat(binsSlice)
 
         store.dispatch({
             type: REPLACE_HISTOGRAM,
-            payload: { histogram: { bins, maxBin } },
+            payload: { histogram: { ...histogram, bins } },
         })
     }
 
