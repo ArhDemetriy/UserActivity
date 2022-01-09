@@ -25,13 +25,12 @@ export const HistogramSVG: React.FC<HistogramSVGProps> = ({ height = 500 }) => {
     function getRects() {
         return bins.map((bin, i) => {
             const height = bin * maxHeight
-            return <g>
+            return <g key={i}>
                 <rect
                     x={`${i * xStep + PADDING}`}
                     y={`${mainHeight - height - PADDING}`}
                     width={`${BAR_WIDTH}`}
                     height={`${height}`}
-                    key={i}
                 />
                 {(i % 5) || getText(i)}
             </g>
@@ -83,7 +82,7 @@ export const HistogramSVG: React.FC<HistogramSVGProps> = ({ height = 500 }) => {
     return <svg
         width={`${mainWidth}`}
         height={`${mainHeight}`}
-        text-rendering="optimizeLegibility"
+        textRendering="optimizeLegibility"
         version="1.1" xmlns="http://www.w3.org/2000/svg"
     >
         <g fill="#4A9DFF">
