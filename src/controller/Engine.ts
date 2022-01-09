@@ -2,6 +2,7 @@ import { FirebaseController } from "../api/FirebaseController";
 import { UserActions } from "../redux/actions/UserActions";
 import { convertToBdUsers, convertToReduxUsers } from "./Engine/converters";
 import { getUsers } from "./Engine/getters";
+import { Validate } from "./Validate";
 
 export class Engine{
     public static init() {
@@ -9,14 +10,14 @@ export class Engine{
     }
 
     public static validate() {
-        return true
+        return Validate.validate()
     }
 
     public static async trySave() {
         if (!this.validate()) { throw new Error("invalid users data") }
 
-        const bdUsers = convertToBdUsers(getUsers())
-        return FirebaseController.saveAll(bdUsers)
+        // const bdUsers = convertToBdUsers(getUsers())
+        // return FirebaseController.saveAll(bdUsers)
     }
 
     public static tryLoad() {

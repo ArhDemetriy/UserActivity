@@ -26,6 +26,7 @@ export interface TUserReducerAction extends TDefaultAction {
 }
 
 type TUser = {
+    isValid?: boolean
     id: number
     registration: Date
     lastActivity: Date

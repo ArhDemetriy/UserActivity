@@ -11,6 +11,7 @@ interface IUserProps extends IBasicProps{
 
 export const User: React.FC<IUserProps> = ({ index, requireCssClass }) => {
     const user = useSelector((store: TState) => store.users[index])
+    const isValid = useSelector((store: TState) => store.users[index].isValid)
 
     const [userId, setUserId] = useState(user.id)
     const [registration, setRegistration] = useState(getHTMLDate(user.registration))
@@ -18,7 +19,9 @@ export const User: React.FC<IUserProps> = ({ index, requireCssClass }) => {
 
     if (!user) { return null }
 
-    return <tr className={requireCssClass + ' user'}>
+    const mainClass = requireCssClass + ' user' + (isValid === false ? ' user_invalid' : '')
+
+    return <tr className={mainClass}>
         <td className={'user-item user-item_first'}>
             <input
                 value={userId}

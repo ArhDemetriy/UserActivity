@@ -12,8 +12,8 @@ export class Histogram{
     }
 
     protected static getBinLifeTimes() {
-        // const lifeTimes = this.getLifeTimes()
-        const lifeTimes = this.getDebugBins(300, 51 * this.DAY)
+        const lifeTimes = this.getLifeTimes()
+        // const lifeTimes = this.getDebugBins(300, 51 * this.DAY)
 
         /** массив столбцов гистограмы */
         const bins: number[] = (new Array(lifeTimes.length)).fill(0)

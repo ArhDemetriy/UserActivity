@@ -10,9 +10,11 @@ export function convertToReduxUsers(bdUsers: TBdUsers) {
 }
 
 export function convertToBdUsers(reduxUsers: ArrayOfUser) {
-    return reduxUsers.map(reduxUser => ({
-        ...reduxUser,
+    const bdUsers: TBdUsers = reduxUsers.map(reduxUser => ({
+        id: reduxUser.id,
         registration: reduxUser.registration.getTime(),
         lastActivity: reduxUser.lastActivity.getTime(),
-    })) as TBdUsers
+    }))
+
+    return bdUsers
 }
