@@ -21,8 +21,7 @@ export type ArrayOfUser = TUser[]
 export interface TUserReducerAction extends TDefaultAction {
     type: typeof ADD_USERS | typeof REPLACE_USERS
     payload: {
-        // это не TUsers, этот тип не обязан меняться при изменении TUsers
-        users: ArrayOfUser
+        users: TUsers
     }
 }
 

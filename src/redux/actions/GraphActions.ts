@@ -1,22 +1,32 @@
 import { store } from "../store";
-import { REPLACE_HISTOGRAM, REPLACE_SPLINE, TGrafReducerAction } from "../store/reducer/grafReducer";
+import { REPLACE_HISTOGRAM, REPLACE_SPLINE, SET_RETENTION, TGrafReducerAction } from "../store/reducer/grafReducer";
 
 /** диспатчеры store.getState().graph */
 export class GraphActions {
+    // retention
+
+    static setRetention(retention: Required<TGrafReducerAction['payload']>['retention']) {
+        store.dispatch({
+            type: SET_RETENTION,
+            payload: {
+                retention
+            },
+        })
+    }
 
     // histogram
 
     /** замена точек гистограммы */
-    static replaceHistogram(payload: Required<Pick<TGrafReducerAction['payload'], 'histogram'>>) {
+    static replaceHistogram(histogram: Required<TGrafReducerAction['payload']>['histogram']) {
         store.dispatch({
             type: REPLACE_HISTOGRAM,
-            payload,
+            payload: { histogram },
         })
     }
 
     /** добавление точек в конец гистограммы */
-    static pushHistogramBins(payload: Required<TGrafReducerAction['payload']>['histogram'][0][]) {
-        const histogram = store.getState().graph.histogram.concat(payload)
+    static pushHistogramBins(histogramSlice: Required<TGrafReducerAction['payload']>['histogram']) {
+        const histogram = store.getState().graph.histogram.concat(histogramSlice)
 
         store.dispatch({
             type: REPLACE_HISTOGRAM,
@@ -26,10 +36,10 @@ export class GraphActions {
 
     // spline
 
-    static replaceSpline(payload: Required<Pick<TGrafReducerAction['payload'], 'spline'>>) {
+    static replaceSpline(spline: Required<TGrafReducerAction['payload']>['spline']) {
         store.dispatch({
             type: REPLACE_SPLINE,
-            payload,
+            payload: { spline },
         })
     }
 }

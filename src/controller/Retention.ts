@@ -1,10 +1,16 @@
+import { GraphActions } from "../redux/actions/GraphActions";
 import { getUsers } from "./Engine/getters";
 
 export class Retention{
+
+    public static calcRetention() {
+        GraphActions.setRetention(this.getRetention(7) || 0)
+    }
+
     /**
      * @param days Retention interval. int > 0
      */
-    public static calcRetention(days: number) {
+    protected static getRetention(days: number) {
         if (days < 1) { return }
         const intervalTime = this.getIntervalTime(days)
         const users = getUsers()
