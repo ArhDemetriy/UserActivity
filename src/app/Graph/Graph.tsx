@@ -1,5 +1,6 @@
 import React from 'react';
 import './Graph.scss';
+import { Histogram } from './Histogram/Histogram';
 import { Retention } from './Retention/Retention';
 
 export const Graph: React.FC = () => {
@@ -7,6 +8,7 @@ export const Graph: React.FC = () => {
         className="graph"
     >
         <Retention />
+        <Histogram />
     </div>
 }
 
