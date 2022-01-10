@@ -32,7 +32,7 @@ export const HistogramSVG: React.FC<HistogramSVGProps> = ({ height = 500 }) => {
                     width={`${BAR_WIDTH}`}
                     height={`${height}`}
                 />
-                {(i % 5) || getText(i)}
+                {!(i % 5) && getText(i)}
             </g>
         })
     }
