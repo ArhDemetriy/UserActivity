@@ -1,5 +1,4 @@
 import { UserActions } from "../redux/actions/UserActions"
-import { TUser } from "../redux/store/reducer/userReducer"
 import { getUsers } from "./Engine/getters"
 
 export class Validate {
