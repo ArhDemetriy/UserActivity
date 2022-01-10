@@ -31,7 +31,7 @@ export class Histogram{
     protected static getLifeTimes() {
         const users = getUsers()
         return users
-        .map(user => user.lastActivity.getTime() - user.registration.getTime())
+        .map(user => user.lastActivity.data.getTime() - user.registration.data.getTime())
     }
 
     private static readonly DAY = 24 * 60 * 60 * 1000

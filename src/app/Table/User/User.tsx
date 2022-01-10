@@ -11,12 +11,11 @@ interface IUserProps extends IBasicProps{
 }
 
 export const User: React.FC<IUserProps> = ({ index, requireCssClass }) => {
-    const isValid = useSelector((store: TState) => store.users[index]?.isValid)
     const userId = useSelector((store: TState) => store.users[index]?.id)
-    const registration = useSelector((store: TState) => getHTMLDate(store.users[index]?.registration))
-    const lastActivity = useSelector((store: TState) => getHTMLDate(store.users[index]?.lastActivity))
+    const registration = useSelector((store: TState) => getHTMLDate(store.users[index]?.registration.data))
+    const lastActivity = useSelector((store: TState) => getHTMLDate(store.users[index]?.lastActivity.data))
 
-    const mainClass = requireCssClass + ' user' + (isValid === false ? ' user_invalid' : '')
+    const mainClass = requireCssClass + ' user'// + (isValid === false ? ' user_invalid' : '')
 
     return <tr className={mainClass}>
         <td className={'user-item user-item_first'}>

@@ -1,51 +1,27 @@
 import { getUsers } from "../../../controller/Engine/getters";
 import { UserActions } from "../../../redux/actions/UserActions";
+import { createData } from "../../../redux/store/reducer/userReducer/createData";
+import { TUser } from "../../../redux/store/reducer/userReducer/userReducer";
 
-let id = 0
-
-const DAY = 24 * 60 * 60 * 1000
-
-export const addUser: React.MouseEventHandler<HTMLButtonElement> = function (event) {
+export function addUser() {
     const reduxUsers = getUsers()
     if (!Array.isArray(reduxUsers) || !reduxUsers.length) {
         UserActions.addUsers([getDefaultUser()])
         return
     }
 
-    const lastUser = reduxUsers[reduxUsers.length - 1]
-    UserActions.addUsers([{
-        ...getDefaultUser(),
-        id: lastUser.id + 1,
-    }])
+    const lastId = reduxUsers[reduxUsers.length - 1].id.data
+    const newUser = getDefaultUser()
+    newUser.id.data = lastId + 1
+    UserActions.addUsers([newUser])
 }
 
-function getDefaultUser(): Parameters<typeof UserActions['addUsers']>[0][0] {
+function getDefaultUser(): TUser {
     return {
-        id: 1,
-        registration: new Date(),
-        lastActivity: new Date(),
-        isValid: true,
+        id: createData(1, 'needValidate'),
+        registration: createData(new Date(), 'needValidate'),
+        lastActivity: createData(new Date(), 'needValidate'),
     }
-}
-
-function getManyUsers(count = 30) {
-    const reduxUsers = getUsers()
-    if (Array.isArray(reduxUsers) && reduxUsers.length > 0) {
-        id = reduxUsers[reduxUsers.length - 1]?.id || id
-    }
-
-    const users: Parameters<typeof UserActions['addUsers']>[0] = []
-
-    for (let i = 0; i < count; i++) {
-        users.push({
-            id: ++id,
-            registration: new Date(id * DAY),
-            lastActivity: new Date(),
-            isValid: true,
-        })
-    }
-
-    return users
 }
 
 
