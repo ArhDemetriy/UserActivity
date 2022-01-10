@@ -1,11 +1,11 @@
-import { ArrayOfUser } from "../../redux/store/reducer/userReducer";
+import { TUser } from "../../redux/store/reducer/userReducer";
 
 export interface IBasicProps {
     requireCssClass: string
 }
 
 export type TBdUsers = (
-    & Omit<ArrayOfUser[0], 'lastActivity' | 'registration' | 'isValid'>
+    & Omit<TUser, 'lastActivity' | 'registration' | 'isValid'>
     // вызовет ошибку при изменении родительского типа. и пробросит TSDoc
-    & { [k in keyof Pick<ArrayOfUser[0], 'lastActivity' | 'registration'>]: number }
+    & { [k in keyof Pick<TUser, 'lastActivity' | 'registration'>]: number }
 )[]

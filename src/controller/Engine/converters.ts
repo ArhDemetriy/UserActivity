@@ -1,4 +1,4 @@
-import { ArrayOfUser } from "../../redux/store/reducer/userReducer";
+import { TUser } from "../../redux/store/reducer/userReducer";
 import { TBdUsers } from "../../types/reactComponents/basic";
 
 export function convertToReduxUsers(bdUsers: TBdUsers) {
@@ -6,10 +6,10 @@ export function convertToReduxUsers(bdUsers: TBdUsers) {
         ...bdUser,
         registration: new Date(bdUser.registration),
         lastActivity: new Date(bdUser.lastActivity),
-    })) as ArrayOfUser
+    })) as TUser[]
 }
 
-export function convertToBdUsers(reduxUsers: ArrayOfUser) {
+export function convertToBdUsers(reduxUsers: TUser[]) {
     const bdUsers: TBdUsers = reduxUsers.map(reduxUser => ({
         id: reduxUser.id,
         registration: reduxUser.registration.getTime(),

@@ -12,11 +12,8 @@ export function userReducer(users: TUsers, action: TAction) {
     return users
 }
 
-/** поле в redux. Этот тип можно модифицировать */
+/** поле в redux. Это не просто массив. Если нужен массив пользователей используй TUser[] */
 export type TUsers = TUser[]
-
-/** просто массив юзеров. Этот тип нельзя модифицировать */
-export type ArrayOfUser = TUser[]
 
 export interface TUserReducerAction extends TDefaultAction {
     type: typeof ADD_USERS | typeof REPLACE_USERS
@@ -25,7 +22,7 @@ export interface TUserReducerAction extends TDefaultAction {
     }
 }
 
-type TUser = {
+export type TUser = {
     isValid?: boolean
     id: number
     registration: Date
