@@ -58,6 +58,21 @@ export class Validate {
         return allValid
     }
 
+    public static validateUserId(from: number) {
+        const users = getUsers()
+        const id = users[from]?.id
+        if (!Number.isFinite(id)) { return false }
+
+        let isValid = users.every((user, i) => id !== user.id || from === i)
+
+        if (users[from].isValid !== isValid) {
+            users[from].isValid = isValid
+            UserActions.updateUser(users[from], from)
+        }
+
+        return isValid
+     }
+
     /**
      * проверяет даты всех пользователей, вызывая индивидуальную проверку для каждого.
      * часто дёргает редакс.
@@ -72,9 +87,9 @@ export class Validate {
         const user = getUsers()[from]
 
         let isValid = true
-        if (!user?.registration?.getTime || !user.lastActivity?.getTime) { return isValid = false }
-        if (user.lastActivity.getTime() > Date.now()) { return isValid = false }
-        if (user.registration.getTime() > user.lastActivity.getTime()) { return isValid = false }
+        if (!user?.registration?.getTime || !user.lastActivity?.getTime) { isValid = false }
+        if (user.lastActivity.getTime() > Date.now()) { isValid = false }
+        if (user.registration.getTime() > user.lastActivity.getTime()) { isValid = false }
 
         if (user.isValid !== isValid) {
             user.isValid = isValid

@@ -24,6 +24,7 @@ function getDefaultUser(): Parameters<typeof UserActions['addUsers']>[0][0] {
         id: 1,
         registration: new Date(),
         lastActivity: new Date(),
+        isValid: true,
     }
 }
 
@@ -40,6 +41,7 @@ function getManyUsers(count = 30) {
             id: ++id,
             registration: new Date(id * DAY),
             lastActivity: new Date(),
+            isValid: true,
         })
     }
 

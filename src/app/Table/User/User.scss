@@ -1,6 +1,9 @@
 @import "/src/globalScss/globalColors";
 
 .user{
+    &_invalid{
+        color: #{color-invalid()};
+    }
     &-item{
         padding: 1rem 2rem;
         background-color: white;
