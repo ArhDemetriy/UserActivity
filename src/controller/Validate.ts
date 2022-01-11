@@ -1,4 +1,5 @@
 import { UserActions } from "../redux/actions/UserActions"
+import { TData, TUser } from "../redux/store/reducer/userReducer/userReducer"
 import { getUsers } from "./Engine/getters"
 
 export class Validate {
@@ -45,20 +46,12 @@ export class Validate {
 
             const isValid = !invalidIndexes.has(user.id.data)
 
-            const result = { ...user }
-
-            if (isValid) {
-                if (user.id.status !== 'valid') {
-                    needUpdate = true
-                    result.id.status = 'valid'
-                    return result
-                }
-            } else {
-                if (user.id.status !== 'invalid') {
-                    needUpdate = true
-                    result.id.status = 'invalid'
-                    return result
-                }
+            if (this.updateValidStatusIn(user, {
+                id: { status: isValid ? 'valid' : 'invalid' },
+            })) {
+                needUpdate = true
+                // пересоздание для обновления хука в User.tsx
+                return { ...user }
             }
 
             return user
@@ -73,18 +66,25 @@ export class Validate {
 
     public static validateUserId(from: number) {
         const users = getUsers()
-        const id = users[from]?.id
-        if (!Number.isFinite(id)) { return false }
+        const user = users[from]
+        if (!user?.id) { return false }
+        const id = user.id.data
 
-        let isValid = users.every((user, i) => id !== user.id || from === i)
+        let isValid = true
+        if (!Number.isFinite(id)) {
+            isValid = false
+        } else {
+            isValid = users.every((user, i) => id !== user.id.data || from === i)
+        }
 
-        if (users[from].isValid !== isValid) {
-            users[from].isValid = isValid
-            UserActions.updateUser(users[from], from)
+        if (this.updateValidStatusIn(user, {
+            id: { status: isValid ? 'valid' : 'invalid' },
+        })) {
+            UserActions.updateUser(user, from)
         }
 
         return isValid
-     }
+    }
 
     /**
      * проверяет даты всех пользователей, вызывая индивидуальную проверку для каждого.
@@ -96,19 +96,46 @@ export class Validate {
         users.forEach((_, i) => { allValid = this.validateUserDate(i) && allValid })
         return allValid
     }
+
     public static validateUserDate(from: number) {
         const user = getUsers()[from]
+        if (!user?.registration || !user.lastActivity) { return false }
 
-        let isValid = true
-        if (!user?.registration?.getTime || !user.lastActivity?.getTime) { isValid = false }
-        if (user.lastActivity.getTime() > Date.now()) { isValid = false }
-        if (user.registration.getTime() > user.lastActivity.getTime()) { isValid = false }
+        const lastActivityIsValid =  user.lastActivity?.data?.getTime
+                                    && user.lastActivity.data.getTime() < Date.now()
 
-        if (user.isValid !== isValid) {
-            user.isValid = isValid
+        let registrationIsValid = !!user.registration?.data?.getTime
+        if (lastActivityIsValid) {
+            registrationIsValid = registrationIsValid && user.registration.data.getTime() < user.lastActivity.data.getTime()
+        } else {
+            registrationIsValid = registrationIsValid && user.registration.data.getTime() < Date.now()
+        }
+
+        if (this.updateValidStatusIn(user, {
+            lastActivity: { status: lastActivityIsValid ? 'valid' : 'invalid' },
+            registration: { status: registrationIsValid ? 'valid' : 'invalid' },
+        })) {
             UserActions.updateUser(user, from)
         }
 
-        return isValid
+        return lastActivityIsValid && registrationIsValid
+    }
+
+    /** мутирует статусы в переданном объекте.
+     * @param mutableUser объект в котором, при необходимости, мутируются статусы
+     * @param status объект со статусами которые должны быть в mutableUser
+     * @returns были-ли изменены статусы
+     */
+    protected static updateValidStatusIn<T extends Record<string, Pick<TData<any>, 'status'>>>(mutableUser: T, status: Partial<Record<keyof T, Pick<TData<any>, 'status'>>>) {
+        let needUpdate = false
+
+        for (const key of Object.keys(status)) {
+            if (mutableUser[key as keyof TUser].status !== status[key as keyof TUser]!.status) {
+                mutableUser[key as keyof TUser].status = status[key as keyof TUser]!.status
+                needUpdate = true
+            }
+        }
+
+        return needUpdate
     }
 }
