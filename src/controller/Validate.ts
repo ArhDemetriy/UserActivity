@@ -12,38 +12,52 @@ export class Validate {
     /**
      * Проверка уникальности id всех юзеров.
      * Обновляет редакс при необходимости.
-     * O(2n) + обновление редакса.
      */
-    public static validateAllIds() {
+    public static validateAllIds(force = true) {
         const users = getUsers()
 
-        const tester: { [k in number]: { count: number, indexes: number[], } } = {}
+        /** { [id] : ArrayOfIndexes } */
+        const tester: { [k in number]: number[] } = {}
 
+        // загоняем в tester количество вхождений каждого id.
         let allValid = true
         users.forEach((user, index) => {
-            const id = user.id
-            if (tester[id]?.count) {
-                tester[id] = {
-                    count: 1,
-                    indexes: [index],
-                }
+            if (user.id.status === 'loading') { return }
+
+            const id = user.id.data
+            if (!tester[id]?.length) {
+                tester[id] =  [index]
             } else {
-                tester[id].indexes.push(index)
-                tester[id].count = tester[id].indexes.length
+                tester[id].push(index)
                 allValid = false
             }
         })
 
+        const invalidIndexes = new Set(([] as number[])
+            .concat(...Object.values(tester)
+                .filter(indexes => indexes.length > 1)))
+
+        // проставление статусов
         let needUpdate = false
         const validateUsers = users.map(user => {
-            const count = tester[user.id]?.count
-            const isValid = !count || count === 1
+            if (!force && user.id.status === 'valid') { return user }
+            if (user.id.status === 'loading') { return user }
 
-            if (user.isValid !== isValid) {
-                needUpdate = true
-                return {
-                    ...user,
-                    isValid
+            const isValid = !invalidIndexes.has(user.id.data)
+
+            const result = { ...user }
+
+            if (isValid) {
+                if (user.id.status !== 'valid') {
+                    needUpdate = true
+                    result.id.status = 'valid'
+                    return result
+                }
+            } else {
+                if (user.id.status !== 'invalid') {
+                    needUpdate = true
+                    result.id.status = 'invalid'
+                    return result
                 }
             }
 
