@@ -13,13 +13,14 @@ interface IUserProps extends IBasicProps{
 
 export const User: React.FC<IUserProps> = ({ index, requireCssClass }) => {
     const id = useSelector((store: TState) => store.users[index]?.id.data)
-    const idIsValid = useSelector((store: TState) => store.users[index]?.id.status === 'valid')
-
-    const lastActivity = useSelector((store: TState) => getHTMLDate(store.users[index]?.lastActivity.data))
-    const lastActivityIsValid = useSelector((store: TState) => store.users[index]?.lastActivity.status === 'valid')
+    const idIsValid = useSelector((store: TState) => store.users[index]?.id.status !== 'invalid')
 
     const registration = useSelector((store: TState) => getHTMLDate(store.users[index]?.registration.data))
-    const registrationIsValid = useSelector((store: TState) => store.users[index]?.registration.status === 'valid')
+    const registrationIsValid = useSelector((store: TState) => store.users[index]?.registration.status !== 'invalid')
+
+    const lastActivity = useSelector((store: TState) => getHTMLDate(store.users[index]?.lastActivity.data))
+    const lastActivityIsValid = useSelector((store: TState) => store.users[index]?.lastActivity.status !== 'invalid')
+
 
     if (!id && id !== 0) { return <div /> }
 
@@ -40,7 +41,9 @@ export const User: React.FC<IUserProps> = ({ index, requireCssClass }) => {
             <input
                 value={registration}
                 name="registration"
-                onChange={event => { updateUser({ registration: createData(getDateFromHTML(event.target.value), 'needValidate') }, index) }}
+                onChange={event => {
+                    updateUser({ registration: createData(getDateFromHTML(event.target.value), 'needValidate') }, index)
+                }}
                 type="date"
                 className={'user-item-input' + (registrationIsValid ? '' : ' user-item-input_invalid')}
                 />

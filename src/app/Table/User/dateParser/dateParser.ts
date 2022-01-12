@@ -8,7 +8,7 @@ export function getDateFromHTML(date: string) {
     const dateValues = date.trim().split('-').map(value => parseInt(value) || 0)
     const newDate = new Date()
     if (dateValues.length) {
-        newDate.setFullYear(dateValues[0], dateValues[1], dateValues[2])
+        newDate.setFullYear(dateValues[0], dateValues[1] - 1, dateValues[2])
     }
     return newDate
 }
