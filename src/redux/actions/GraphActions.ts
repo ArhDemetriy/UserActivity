@@ -1,5 +1,5 @@
 import { store } from "../store";
-import { REPLACE_HISTOGRAM, REPLACE_SPLINE, SET_RETENTION, TGrafReducerAction } from "../store/reducer/grafReducer";
+import { REPLACE_HISTOGRAM, REPLACE_METRICS, REPLACE_SPLINE, SET_RETENTION, TGrafReducerAction } from "../store/reducer/grafReducer";
 
 /** диспатчеры store.getState().graph */
 export class GraphActions {
@@ -41,6 +41,15 @@ export class GraphActions {
         store.dispatch({
             type: REPLACE_SPLINE,
             payload: { spline },
+        })
+    }
+
+    // metrics
+
+    static replaceMetrics(metrics: Required<TGrafReducerAction['payload']>['metrics']) {
+        store.dispatch({
+            type: REPLACE_METRICS,
+            payload: { metrics },
         })
     }
 }

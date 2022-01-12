@@ -28,6 +28,12 @@ const defaultState: TState = {
             maxBin: NaN,
         },
         spline: [],
+        metrics: {
+            average: NaN,
+            median: NaN,
+            percentile10: NaN,
+            percentile90: NaN,
+        },
     },
 }
 

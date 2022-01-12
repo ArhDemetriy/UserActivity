@@ -1,15 +1,21 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
+import { Histogram } from '../../../../controller/Histogram';
 import { TState } from '../../../../redux/store/reducer';
 
 interface HistogramSVGProps{
     height?: number
 }
 
+const RANK = 2
+
 export const HistogramSVG: React.FC<HistogramSVGProps> = ({ height = 500 }) => {
-    const maxBin = useSelector((store: TState) => store.graph.histogram.maxBin || 0)
-    const bins = useSelector((store: TState) => store.graph.histogram.bins)
-    if (!Array.isArray(bins)) { return <svg /> }
+    const reduxMaxBin = useSelector((store: TState) => store.graph.histogram.maxBin || 0)
+    const reduxBins = useSelector((store: TState) => store.graph.histogram.bins)
+    if (!Array.isArray(reduxBins)) { return <svg /> }
+
+    const maxBin = Histogram.getRoundedToRank(reduxMaxBin, RANK)
+    const bins = reduxBins.map(bin => Histogram.getRoundedToRank(bin, RANK))
 
     // const mainHeight = Math.round(maxBin * 1.5 + 20)
     const mainHeight = height
