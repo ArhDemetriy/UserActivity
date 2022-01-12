@@ -1,12 +1,13 @@
 @import "/src/globalScss/globalColors";
 
 .user{
+    // border-radius: 5px;
     &_invalid{
         color: #{color-invalid()};
     }
     &-item{
-        padding: 1rem 2rem;
         background-color: white;
+        padding: 1rem 2rem;
         &_first {
             border-radius: 5px 0 0 5px ;
         }
@@ -26,5 +27,8 @@
                 appearance: textfield;
             }
         }
+    }
+    &-delete_button{
+        border: none;
     }
 }

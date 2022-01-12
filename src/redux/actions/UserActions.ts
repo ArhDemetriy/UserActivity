@@ -41,4 +41,17 @@ export class UserActions {
             },
         })
     }
+
+    static deleteUsers(index: number) {
+        const users = store.getState().users
+        users.splice(index, 1)
+
+        store.dispatch({
+            type: REPLACE_USERS,
+            payload: {
+                users
+            },
+        })
+    }
+
 }

@@ -7,3 +7,7 @@ export function updateUser(newUser: Partial<TUser>, index: number) {
     if (!user) { return }
     UserActions.updateUser({ ...user, ...newUser }, index)
 }
+
+export function deleteUser(index: number) {
+    UserActions.deleteUsers(index)
+}

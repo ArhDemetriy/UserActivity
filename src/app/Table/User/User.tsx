@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import { TState } from '../../../redux/store/reducer';
 import { IBasicProps } from '../../../types/reactComponents/basic';
 import { getDateFromHTML, getHTMLDate } from './dateParser/dateParser';
-import { updateUser } from './eventHandlers/updateUser';
+import { deleteUser, updateUser } from './eventHandlers/updateUser';
 import { createData } from '../../../redux/store/reducer/userReducer/createData';
 
 interface IUserProps extends IBasicProps{
@@ -50,7 +50,7 @@ export const User: React.FC<IUserProps> = ({ index, requireCssClass }) => {
                 className={'user-item-input' + (registrationIsValid ? '' : ' user-item-input_invalid')}
                 />
         </td>
-        <td className={'user-item user-item_last'}>
+        <td className={'user-item'}>
             <input
                 value={lastActivity}
                 name="lastActivity"
@@ -58,6 +58,15 @@ export const User: React.FC<IUserProps> = ({ index, requireCssClass }) => {
                 type="date"
                 className={'user-item-input' + (lastActivityIsValid ? '' : ' user-item-input_invalid')}
             />
+        </td>
+        <td className={'user-item user-item_last'}>
+            <button
+                className={'user-delete_button'}
+                type="button"
+                onClick={() => { deleteUser(index) }}
+            >
+                <img src="/img/trash.svg" alt="удалить" />
+            </button>
         </td>
     </tr>
 }

@@ -6,7 +6,7 @@ export class Retention{
 
     public static calcRetention() {
         const retention7 = this.getRollingRetention(7)
-        if (Number.isFinite(retention7)) { GraphActions.setRetention(retention7 * 100) }
+        if (Number.isFinite(retention7)) { GraphActions.setRetention(retention7) }
     }
 
     /**
