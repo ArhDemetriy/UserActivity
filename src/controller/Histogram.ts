@@ -41,11 +41,6 @@ export class Histogram{
         return raw.map(n => n / k)
     }
 
-    public static getRoundedToRank(x: number, rank: number) {
-        if (!rank) { return 0 }
-        return Math.round(x * 10 * rank) / (10 * rank)
-    }
-
     /** @returns массив времён жизни всех пользователей */
     protected static getLifeDays() {
         const DAY = 24 * 60 * 60 * 1000

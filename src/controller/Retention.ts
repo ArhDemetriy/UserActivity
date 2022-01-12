@@ -1,11 +1,12 @@
 import { GraphActions } from "../redux/actions/GraphActions";
+import { getRoundedToRank } from "./Engine/converters";
 import { getUsers } from "./Engine/getters";
 
 export class Retention{
 
     public static calcRetention() {
         const retention7 = this.getRollingRetention(7)
-        if (Number.isFinite(retention7)) { GraphActions.setRetention(retention7) }
+        if (Number.isFinite(retention7)) { GraphActions.setRetention(retention7 * 100) }
     }
 
     /**

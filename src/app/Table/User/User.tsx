@@ -21,7 +21,6 @@ export const User: React.FC<IUserProps> = ({ index, requireCssClass }) => {
     const lastActivity = useSelector((store: TState) => getHTMLDate(store.users[index]?.lastActivity.data))
     const lastActivityIsValid = useSelector((store: TState) => store.users[index]?.lastActivity.status !== 'invalid')
 
-
     if (!id && id !== 0) { return <div /> }
 
     const mainClass = requireCssClass + ' user'// + (isValid === false ? ' user_invalid' : '')
@@ -31,6 +30,8 @@ export const User: React.FC<IUserProps> = ({ index, requireCssClass }) => {
             <input
                 value={id}
                 name="userId"
+                min={0}
+                step={1}
                 onChange={event => { updateUser({ id: createData(+event.target.value, 'needValidate') }, index) }}
                 type="number"
                 className={'user-item-input user-item-input_clear' + (idIsValid ? '' : ' user-item-input_invalid')}
@@ -40,6 +41,7 @@ export const User: React.FC<IUserProps> = ({ index, requireCssClass }) => {
         <td className={'user-item'}>
             <input
                 value={registration}
+                max={getHTMLDate(new Date())}
                 name="registration"
                 onChange={event => {
                     updateUser({ registration: createData(getDateFromHTML(event.target.value), 'needValidate') }, index)

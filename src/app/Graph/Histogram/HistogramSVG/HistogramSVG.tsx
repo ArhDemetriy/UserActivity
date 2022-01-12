@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { Histogram } from '../../../../controller/Histogram';
+import { getRoundedToRank } from '../../../../controller/Engine/converters';
 import { TState } from '../../../../redux/store/reducer';
 
 interface HistogramSVGProps{
@@ -15,8 +15,8 @@ export const HistogramSVG: React.FC<HistogramSVGProps> = ({ height = 500 }) => {
     // const metrics = useSelector((store: TState) => store.graph.metrics)
     if (!Array.isArray(reduxBins)) { return <svg /> }
 
-    const maxBin = Histogram.getRoundedToRank(reduxMaxBin, RANK)
-    const bins = reduxBins.map(bin => Histogram.getRoundedToRank(bin, RANK))
+    const maxBin = getRoundedToRank(reduxMaxBin, RANK)
+    const bins = reduxBins.map(bin => getRoundedToRank(bin, RANK))
 
     // const mainHeight = Math.round(maxBin * 1.5 + 20)
     const mainHeight = height
