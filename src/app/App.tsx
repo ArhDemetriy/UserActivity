@@ -6,11 +6,13 @@ import { Table } from './Table/Table';
 
 export const App: React.FC = () => {
   return <div className="app">
+    <Controls />
     <div className="app-data">
-      <Table />
+      <div className="app-data-table">
+        <Table />
+      </div>
       <Graph />
     </div>
-    <Controls />
   </div>
 }
 

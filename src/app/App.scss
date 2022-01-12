@@ -9,5 +9,9 @@
     justify-content: space-between;
     align-items: flex-start;
     gap: Min(21px, 1.5rem);
+    &-table{
+      max-height: calc(96vh - Min(21px, 1.5rem) - 3rem);
+      overflow-y: scroll;
+    }
   }
 }
