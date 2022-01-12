@@ -5,46 +5,53 @@ import { TState } from '../../../redux/store/reducer';
 import { IBasicProps } from '../../../types/reactComponents/basic';
 import { getDateFromHTML, getHTMLDate } from './dateParser/dateParser';
 import { updateUser } from './eventHandlers/updateUser';
+import { createData } from '../../../redux/store/reducer/userReducer/createData';
 
 interface IUserProps extends IBasicProps{
     index: number
 }
 
 export const User: React.FC<IUserProps> = ({ index, requireCssClass }) => {
-    const isValid = useSelector((store: TState) => store.users[index]?.isValid)
-    const userId = useSelector((store: TState) => store.users[index]?.id)
-    const registration = useSelector((store: TState) => getHTMLDate(store.users[index]?.registration))
-    const lastActivity = useSelector((store: TState) => getHTMLDate(store.users[index]?.lastActivity))
+    const id = useSelector((store: TState) => store.users[index]?.id.data)
+    const idIsValid = useSelector((store: TState) => store.users[index]?.id.status === 'valid')
 
-    const mainClass = requireCssClass + ' user' + (isValid === false ? ' user_invalid' : '')
+    const lastActivity = useSelector((store: TState) => getHTMLDate(store.users[index]?.lastActivity.data))
+    const lastActivityIsValid = useSelector((store: TState) => store.users[index]?.lastActivity.status === 'valid')
+
+    const registration = useSelector((store: TState) => getHTMLDate(store.users[index]?.registration.data))
+    const registrationIsValid = useSelector((store: TState) => store.users[index]?.registration.status === 'valid')
+
+    if (!id && id !== 0) { return <div /> }
+
+    const mainClass = requireCssClass + ' user'// + (isValid === false ? ' user_invalid' : '')
 
     return <tr className={mainClass}>
         <td className={'user-item user-item_first'}>
             <input
-                value={userId}
+                value={id}
                 name="userId"
-                onChange={event => { updateUser({ id: +event.target.value }, index) }}
+                onChange={event => { updateUser({ id: createData(+event.target.value, 'needValidate') }, index) }}
                 type="number"
-                className={'user-item-input user-item-input_clear'}
-                size={userId.toString().length + 1}
+                className={'user-item-input user-item-input_clear' + (idIsValid ? '' : ' user-item-input_invalid')}
+                size={id.toString().length + 1}
                 />
         </td>
         <td className={'user-item'}>
             <input
                 value={registration}
                 name="registration"
-                onChange={event => { updateUser({ registration: getDateFromHTML(event.target.value) }, index) }}
+                onChange={event => { updateUser({ registration: createData(getDateFromHTML(event.target.value), 'needValidate') }, index) }}
                 type="date"
-                className={'user-item-input'}
+                className={'user-item-input' + (registrationIsValid ? '' : ' user-item-input_invalid')}
                 />
         </td>
         <td className={'user-item user-item_last'}>
             <input
                 value={lastActivity}
                 name="lastActivity"
-                onChange={event => { updateUser({ lastActivity: getDateFromHTML(event.target.value) }, index) }}
+                onChange={event => { updateUser({ lastActivity: createData(getDateFromHTML(event.target.value), 'needValidate') }, index) }}
                 type="date"
-                className={'user-item-input'}
+                className={'user-item-input' + (lastActivityIsValid ? '' : ' user-item-input_invalid')}
             />
         </td>
     </tr>

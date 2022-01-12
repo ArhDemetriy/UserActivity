@@ -1,6 +1,7 @@
 import { Reducer } from "redux"
 import { grafReducer, TGrafReducerAction, TGraph } from "./reducer/grafReducer"
-import { TUserReducerAction, TUsers, userReducer } from "./reducer/userReducer"
+import { TUserReducerAction, userReducer } from "./reducer/userReducer"
+import { TUsers } from "./reducer/userReducer/userReducer"
 
 export interface TDefaultAction {
     type: string

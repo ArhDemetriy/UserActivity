@@ -36,7 +36,7 @@ export class Retention{
         const users = getUsers()
         for (const user of users) {
             /** начало суток в которых юзер зарегистрировался */
-            const registration = this.floorTime(user.registration.getTime())
+            const registration = this.floorTime(user.registration.data.getTime())
             // количество пользователей, зарегистрировавшихся в системе X дней назад или раньше
             // это значит что расстояние между округлёнными таймстампами должно быть >= округлённого запрашиваемого интервала
             if (now - registration >= intervalTime) {
@@ -44,7 +44,7 @@ export class Retention{
             }
 
             /** начало суток в которых была последняя активность юзера */
-            const lastActivity = this.floorTime(user.lastActivity.getTime())
+            const lastActivity = this.floorTime(user.lastActivity.data.getTime())
             // количество пользователей, вернувшихся в систему в X-ый день после регистрации или позже
             // по сути та-же функция что в условии выше. Т.к. в формулировке меняется знак времени
             if (lastActivity - registration >= intervalTime) {
@@ -86,10 +86,10 @@ export class Retention{
         const now = Date.now()
 
         for (const user of users) {
-            const registration = user.registration.getTime()
+            const registration = user.registration.data.getTime()
             if (now - registration <= intervalTime) {
                 news++
-            } else if (user.lastActivity.getTime() - registration >= intervalTime) {
+            } else if (user.lastActivity.data.getTime() - registration >= intervalTime) {
                 returns++
             }
         }

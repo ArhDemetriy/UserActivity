@@ -1,5 +1,5 @@
 import { UserActions } from "../redux/actions/UserActions"
-import { TUser } from "../redux/store/reducer/userReducer"
+import { TData, TUser } from "../redux/store/reducer/userReducer/userReducer"
 import { getUsers } from "./Engine/getters"
 
 export class Validate {
@@ -13,39 +13,45 @@ export class Validate {
     /**
      * Проверка уникальности id всех юзеров.
      * Обновляет редакс при необходимости.
-     * O(2n) + обновление редакса.
      */
-    public static validateAllIds() {
+    public static validateAllIds(force = true) {
         const users = getUsers()
 
-        const tester: { [k in number]: { count: number, indexes: number[], } } = {}
+        /** { [id] : ArrayOfIndexes } */
+        const tester: { [k in number]: number[] } = {}
 
+        // загоняем в tester количество вхождений каждого id.
         let allValid = true
         users.forEach((user, index) => {
-            const id = user.id
-            if (tester[id]?.count) {
-                tester[id] = {
-                    count: 1,
-                    indexes: [index],
-                }
+            if (user.id.status === 'loading') { return }
+
+            const id = user.id.data
+            if (!tester[id]?.length) {
+                tester[id] =  [index]
             } else {
-                tester[id].indexes.push(index)
-                tester[id].count = tester[id].indexes.length
+                tester[id].push(index)
                 allValid = false
             }
         })
 
+        const invalidIndexes = new Set(([] as number[])
+            .concat(...Object.values(tester)
+                .filter(indexes => indexes.length > 1)))
+
+        // проставление статусов
         let needUpdate = false
         const validateUsers = users.map(user => {
-            const count = tester[user.id]?.count
-            const isValid = !count || count === 1
+            if (!force && user.id.status === 'valid') { return user }
+            if (user.id.status === 'loading') { return user }
 
-            if (user.isValid !== isValid) {
+            const isValid = !invalidIndexes.has(user.id.data)
+
+            if (this.updateValidStatusIn(user, {
+                id: { status: isValid ? 'valid' : 'invalid' },
+            })) {
                 needUpdate = true
-                return {
-                    ...user,
-                    isValid
-                }
+                // пересоздание для обновления хука в User.tsx
+                return { ...user }
             }
 
             return user
@@ -60,18 +66,25 @@ export class Validate {
 
     public static validateUserId(from: number) {
         const users = getUsers()
-        const id = users[from]?.id
-        if (!Number.isFinite(id)) { return false }
+        const user = users[from]
+        if (!user?.id) { return false }
+        const id = user.id.data
 
-        let isValid = users.every((user, i) => id !== user.id || from === i)
+        let isValid = true
+        if (!Number.isFinite(id)) {
+            isValid = false
+        } else {
+            isValid = users.every((user, i) => id !== user.id.data || from === i)
+        }
 
-        if (users[from].isValid !== isValid) {
-            users[from].isValid = isValid
-            UserActions.updateUser(users[from], from)
+        if (this.updateValidStatusIn(user, {
+            id: { status: isValid ? 'valid' : 'invalid' },
+        })) {
+            UserActions.updateUser(user, from)
         }
 
         return isValid
-     }
+    }
 
     /**
      * проверяет даты всех пользователей, вызывая индивидуальную проверку для каждого.
@@ -83,19 +96,49 @@ export class Validate {
         users.forEach((_, i) => { allValid = this.validateUserDate(i) && allValid })
         return allValid
     }
+
     public static validateUserDate(from: number) {
         const user = getUsers()[from]
+        if (!user?.registration || !user?.lastActivity) { return false }
 
-        let isValid = true
-        if (!user?.registration?.getTime || !user.lastActivity?.getTime) { isValid = false }
-        if (user.lastActivity.getTime() > Date.now()) { isValid = false }
-        if (user.registration.getTime() > user.lastActivity.getTime()) { isValid = false }
+        const lastActivity = user.lastActivity.data?.getTime && user.lastActivity.data.getTime()
+        const registration = user.registration.data?.getTime && user.registration.data.getTime()
+        const now = Date.now()
 
-        if (user.isValid !== isValid) {
-            user.isValid = isValid
+        const lastActivityIsValid =  lastActivity < now
+
+        let registrationIsValid = true
+        if (lastActivityIsValid) {
+            registrationIsValid = registration <= lastActivity
+        } else {
+            registrationIsValid = registration < now
+        }
+
+        if (this.updateValidStatusIn(user, {
+            lastActivity: { status: lastActivityIsValid ? 'valid' : 'invalid' },
+            registration: { status: registrationIsValid ? 'valid' : 'invalid' },
+        })) {
             UserActions.updateUser(user, from)
         }
 
-        return isValid
+        return lastActivityIsValid && registrationIsValid
+    }
+
+    /** мутирует статусы в переданном объекте.
+     * @param mutableUser объект в котором, при необходимости, мутируются статусы
+     * @param status объект со статусами которые должны быть в mutableUser
+     * @returns были-ли изменены статусы
+     */
+    protected static updateValidStatusIn<T extends Record<string, Pick<TData<any>, 'status'>>>(mutableUser: T, status: Partial<Record<keyof T, Pick<TData<any>, 'status'>>>) {
+        let needUpdate = false
+
+        for (const key of Object.keys(status)) {
+            if (mutableUser[key as keyof TUser].status !== status[key as keyof TUser]!.status) {
+                mutableUser[key as keyof TUser].status = status[key as keyof TUser]!.status
+                needUpdate = true
+            }
+        }
+
+        return needUpdate
     }
 }
