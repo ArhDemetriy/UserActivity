@@ -77,8 +77,6 @@ export class Histogram{
 
     /** @param sortedLifeTimes: sorted number[] */
     protected static getMedian(sortedLifeTimes: number[]) {
-        console.debug('sortedLifeTimes')
-        console.debug(sortedLifeTimes)
         if (sortedLifeTimes.length % 2 > 0) {
             return sortedLifeTimes[Math.floor(sortedLifeTimes.length / 2)]
         } else {

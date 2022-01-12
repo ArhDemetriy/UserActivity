@@ -12,6 +12,7 @@ const RANK = 2
 export const HistogramSVG: React.FC<HistogramSVGProps> = ({ height = 500 }) => {
     const reduxMaxBin = useSelector((store: TState) => store.graph.histogram.maxBin || 0)
     const reduxBins = useSelector((store: TState) => store.graph.histogram.bins)
+    // const metrics = useSelector((store: TState) => store.graph.metrics)
     if (!Array.isArray(reduxBins)) { return <svg /> }
 
     const maxBin = Histogram.getRoundedToRank(reduxMaxBin, RANK)
@@ -29,7 +30,7 @@ export const HistogramSVG: React.FC<HistogramSVGProps> = ({ height = 500 }) => {
 
     /** генерирует столбцы гистограмы. Они растут вверх отступая от нижней границы экрана и боков на PADDING */
     function getRects() {
-        return bins.map((bin, i) => {
+        const result = bins.map((bin, i) => {
             const height = bin * maxHeight
             return <g key={i}>
                 <rect
@@ -41,6 +42,7 @@ export const HistogramSVG: React.FC<HistogramSVGProps> = ({ height = 500 }) => {
                 {!(i % 5) && getText(i)}
             </g>
         })
+        return result
     }
 
     function getText(i: number) {
@@ -85,6 +87,13 @@ export const HistogramSVG: React.FC<HistogramSVGProps> = ({ height = 500 }) => {
         </g>
     }
 
+    function getSpline() {
+        return <g stroke="rgba(74, 157, 255, .4)">
+
+        </g>
+    }
+
+
     return <svg
         width={`${mainWidth}`}
         height={`${mainHeight}`}
@@ -94,6 +103,7 @@ export const HistogramSVG: React.FC<HistogramSVGProps> = ({ height = 500 }) => {
         <g fill="#4A9DFF">
             {getYScale()}
             {getRects()}
+            {getSpline()}
         </g>
     </svg>
 }
