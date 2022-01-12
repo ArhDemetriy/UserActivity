@@ -42,7 +42,7 @@ export const User: React.FC<IUserProps> = ({ index, requireCssClass }) => {
                 name="registration"
                 onChange={event => { updateUser({ registration: createData(getDateFromHTML(event.target.value), 'needValidate') }, index) }}
                 type="date"
-                className={'user-item-input' + (lastActivityIsValid ? '' : ' user-item-input_invalid')}
+                className={'user-item-input' + (registrationIsValid ? '' : ' user-item-input_invalid')}
                 />
         </td>
         <td className={'user-item user-item_last'}>
@@ -51,7 +51,7 @@ export const User: React.FC<IUserProps> = ({ index, requireCssClass }) => {
                 name="lastActivity"
                 onChange={event => { updateUser({ lastActivity: createData(getDateFromHTML(event.target.value), 'needValidate') }, index) }}
                 type="date"
-                className={'user-item-input' + (registrationIsValid ? '' : ' user-item-input_invalid')}
+                className={'user-item-input' + (lastActivityIsValid ? '' : ' user-item-input_invalid')}
             />
         </td>
     </tr>

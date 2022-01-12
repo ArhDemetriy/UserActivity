@@ -99,16 +99,19 @@ export class Validate {
 
     public static validateUserDate(from: number) {
         const user = getUsers()[from]
-        if (!user?.registration || !user.lastActivity) { return false }
+        if (!user?.registration || !user?.lastActivity) { return false }
 
-        const lastActivityIsValid =  user.lastActivity?.data?.getTime
-                                    && user.lastActivity.data.getTime() < Date.now()
+        const lastActivity = user.lastActivity.data?.getTime && user.lastActivity.data.getTime()
+        const registration = user.registration.data?.getTime && user.registration.data.getTime()
+        const now = Date.now()
 
-        let registrationIsValid = !!user.registration?.data?.getTime
+        const lastActivityIsValid =  lastActivity < now
+
+        let registrationIsValid = true
         if (lastActivityIsValid) {
-            registrationIsValid = registrationIsValid && user.registration.data.getTime() < user.lastActivity.data.getTime()
+            registrationIsValid = registration <= lastActivity
         } else {
-            registrationIsValid = registrationIsValid && user.registration.data.getTime() < Date.now()
+            registrationIsValid = registration < now
         }
 
         if (this.updateValidStatusIn(user, {
