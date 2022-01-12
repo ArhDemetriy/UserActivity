@@ -16,18 +16,28 @@ export class Engine{
     public static async trySave() {
         if (!this.validate()) { throw new Error("invalid users data") }
 
-        // const bdUsers = convertToBdUsers(getUsers())
-        // return FirebaseController.saveAll(bdUsers)
+        const bdUsers = convertToBdUsers(getUsers())
+        return FirebaseController.saveAll(bdUsers)
     }
 
     public static tryLoad() {
-        return FirebaseController.load()
-            .then(bdUsers => convertToReduxUsers(bdUsers))
-            .then(reduxUsers => UserActions.replaceUsers(reduxUsers))
+        return this.separatePromise(() => FirebaseController.load())
+            .then(bdUsers => this.separatePromise(() => convertToReduxUsers(bdUsers)))
+            .then(reduxUsers => this.separatePromise(() => UserActions.replaceUsers(reduxUsers)))
+
+        // return FirebaseController.load()
+        //     .then(bdUsers => convertToReduxUsers(bdUsers))
+        //     .then(reduxUsers => UserActions.replaceUsers(reduxUsers))
     }
 
     public static safetyLoad() {
         return this.tryLoad()
             .catch(e => console.error(e))
+    }
+
+    protected static separatePromise<T>(callback: () => Promise<T> | T, timeout = 0) {
+        return new Promise<T>((resolve) => {
+            setTimeout(() => { resolve(callback()) }, timeout)
+        })
     }
 }

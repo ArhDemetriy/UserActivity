@@ -4,12 +4,17 @@ import './button/button.scss';
 import { save } from './EventHandlers/Save';
 import { addUser } from './EventHandlers/AddUser';
 import { calculate } from './EventHandlers/Calculate';
+import { useSelector } from 'react-redux';
+import { TState } from '../../redux/store/reducer';
 
 export const Controls: React.FC = () => {
+    const usersIsExists = useSelector((store: TState) => store.users?.length > 0)
+
     const [loading, setLoading] = useState(false)
     const saveButtonClick: React.MouseEventHandler<HTMLButtonElement> = function (event) {
+        if (loading) { return }
         setLoading(true)
-        save().finally(() => setLoading(false))
+        save(() => setLoading(false))
     }
 
     return <div
@@ -17,19 +22,19 @@ export const Controls: React.FC = () => {
     >
         <button
             className='controls-button_add button'
-            disabled={loading}
+            // disabled={loading}
             type='button'
             onClick={addUser}
         >Add</button>
         <button
             className='controls-button_save button'
-            disabled={loading}
+            disabled={!usersIsExists}
             type='submit'
             onClick={saveButtonClick}
         >Save</button>
         <button
             className='controls-button_calculate button'
-            disabled={loading}
+            disabled={!usersIsExists}
             type='button'
             onClick={calculate}
         >Calculate</button>
