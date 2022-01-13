@@ -42,7 +42,7 @@ export class UserActions {
         })
     }
 
-    static deleteUsers(index: number) {
+    static deleteUser(index: number) {
         const users = store.getState().users
         users.splice(index, 1)
 

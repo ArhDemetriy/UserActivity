@@ -1,30 +1,30 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './User.scss';
 import { useSelector } from 'react-redux';
 import { TState } from '../../../redux/store/reducer';
 import { IBasicProps } from '../../../types/reactComponents/basic';
-import { getDateFromHTML, getHTMLDate } from './dateParser/dateParser';
-import { deleteUser, updateUser } from './eventHandlers/updateUser';
-import { createData } from '../../../redux/store/reducer/userReducer/createData';
+import { deleteUser, getHTMLDate, getUpdateUserHandler, updateUser } from './eventHandlers/updateUser';
 
 interface IUserProps extends IBasicProps{
     index: number
 }
 
 export const User: React.FC<IUserProps> = ({ index, requireCssClass }) => {
-    const id = useSelector((store: TState) => store.users[index]?.id.data)
+    const reduxId = useSelector((store: TState) => store.users[index]?.id.data)
+    const [id, setId] = useState(reduxId)
     const idIsValid = useSelector((store: TState) => store.users[index]?.id.status !== 'invalid')
 
-    const registration = useSelector((store: TState) => getHTMLDate(store.users[index]?.registration.data))
+    const reduxRegistration = useSelector((store: TState) => getHTMLDate(store.users[index]?.registration.data))
+    const [registration, setRegistration] = useState(reduxRegistration)
     const registrationIsValid = useSelector((store: TState) => store.users[index]?.registration.status !== 'invalid')
 
-    const lastActivity = useSelector((store: TState) => getHTMLDate(store.users[index]?.lastActivity.data))
+    const reduxLastActivity = useSelector((store: TState) => getHTMLDate(store.users[index]?.lastActivity.data))
+    const [lastActivity, setLastActivity] = useState(reduxLastActivity)
     const lastActivityIsValid = useSelector((store: TState) => store.users[index]?.lastActivity.status !== 'invalid')
 
     if (!id && id !== 0) { return <div /> }
 
-    const mainClass = requireCssClass + ' user'// + (isValid === false ? ' user_invalid' : '')
-
+    const mainClass = requireCssClass + ' user'
     return <tr className={mainClass}>
         <td className={'user-item user-item_first'}>
             <input
@@ -32,7 +32,11 @@ export const User: React.FC<IUserProps> = ({ index, requireCssClass }) => {
                 name="userId"
                 min={0}
                 step={1}
-                onChange={event => { updateUser({ id: createData(+event.target.value, 'needValidate') }, index) }}
+                onChange={event => setId(+event.target.value)}
+                onBlur={getUpdateUserHandler({
+                    key: 'id', index,
+                    changeCallback: newValue => { setId(newValue as number) }
+                })}
                 type="number"
                 className={'user-item-input user-item-input_clear' + (idIsValid ? '' : ' user-item-input_invalid')}
                 size={id.toString().length + 1}
@@ -41,11 +45,13 @@ export const User: React.FC<IUserProps> = ({ index, requireCssClass }) => {
         <td className={'user-item'}>
             <input
                 value={registration}
-                max={getHTMLDate(new Date())}
                 name="registration"
-                onChange={event => {
-                    updateUser({ registration: createData(getDateFromHTML(event.target.value), 'needValidate') }, index)
-                }}
+                max={getHTMLDate(new Date())}
+                onChange={event => setRegistration(event.target.value)}
+                onBlur={getUpdateUserHandler({
+                    key: 'registration', index,
+                    changeCallback: newValue => { setRegistration(newValue as string) }
+                })}
                 type="date"
                 className={'user-item-input' + (registrationIsValid ? '' : ' user-item-input_invalid')}
                 />
@@ -54,7 +60,12 @@ export const User: React.FC<IUserProps> = ({ index, requireCssClass }) => {
             <input
                 value={lastActivity}
                 name="lastActivity"
-                onChange={event => { updateUser({ lastActivity: createData(getDateFromHTML(event.target.value), 'needValidate') }, index) }}
+                max={getHTMLDate(new Date())}
+                onChange={event => setLastActivity(event.target.value)}
+                onBlur={getUpdateUserHandler({
+                    key: 'lastActivity', index,
+                    changeCallback: newValue => { setLastActivity(newValue as string) }
+                })}
                 type="date"
                 className={'user-item-input' + (lastActivityIsValid ? '' : ' user-item-input_invalid')}
             />

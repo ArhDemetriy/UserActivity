@@ -1,5 +1,4 @@
 import { GraphActions } from "../redux/actions/GraphActions";
-import { getRoundedToRank } from "./Engine/converters";
 import { getUsers } from "./Engine/getters";
 
 export class Retention{
