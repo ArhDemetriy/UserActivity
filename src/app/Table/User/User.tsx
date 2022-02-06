@@ -3,7 +3,7 @@ import './User.scss';
 import { useSelector } from 'react-redux';
 import { TState } from '../../../redux/store/reducer';
 import { IBasicProps } from '../../../types/reactComponents/basic';
-import { deleteUser, getHTMLDate, getUpdateUserHandler, updateUser } from './eventHandlers/updateUser';
+import { deleteUser, getHTMLDate, getUpdateUserHandler } from './eventHandlers/updateUser';
 
 interface IUserProps extends IBasicProps{
     index: number
