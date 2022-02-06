@@ -1,6 +1,7 @@
 @import "/src/globalScss/globalColors";
 
 .histogram{
-    background-color: #{color-background()};
+    background-color: white;
+    border-radius: 5px;
     width: max-content;
 }
