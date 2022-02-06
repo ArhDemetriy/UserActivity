@@ -4,8 +4,8 @@ import { getHistogram, getUsers } from "./Engine/getters";
 export class Histogram{
 
     public static calcAll() {
-        this.calcHistogram()
-        setTimeout(this.calcMetrics.bind(this), 0)
+        this.calcMetrics()
+        setTimeout(this.calcHistogram.bind(this), 0)
         setTimeout(this.calcSpline.bind(this), 0)
     }
 
@@ -21,18 +21,16 @@ export class Histogram{
     }
 
     protected static getBinLifeTimes() {
-        const lifeDays = this.getLifeDays()
+        const lives = this.getLifeDays().map(d => Math.round(d))
+        const biggestLife = Math.max(...lives)
 
         /** массив столбцов гистограмы */
-        const bins: number[] = (new Array(lifeDays.length)).fill(0)
-        let maxI = 0
-        for (const lifeTime of lifeDays) {
-            const i = lifeTime
-            bins[i] += 1
-            if (i > maxI) { maxI = i }
+        const bins: number[] = (new Array(biggestLife + 1)).fill(0)
+        for (const life of lives) {
+            bins[life] += 1
         }
 
-        return bins.slice(0, maxI + 1)
+        return bins
     }
 
     protected static normTo1(raw: number[], max?: number) {
@@ -52,7 +50,7 @@ export class Histogram{
     // Metrics
 
     protected static calcMetrics() {
-        const lifeDays = this.getLifeDays().sort()
+        const lifeDays = this.getLifeDays().sort((a, b) => a - b)
 
         const result = {
             average: this.getAverage(lifeDays),
