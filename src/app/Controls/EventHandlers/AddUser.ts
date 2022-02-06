@@ -17,11 +17,17 @@ export function addUser() {
 }
 
 function getDefaultUser(): TUser {
-    return {
+    const result = {
         id: createData(1, 'needValidate'),
-        registration: createData(new Date(), 'needValidate'),
-        lastActivity: createData(new Date(), 'needValidate'),
+        registration: createData(new Date(0), 'needValidate'),
+        lastActivity: createData(new Date(0), 'needValidate'),
     }
+
+    const now = new Date()
+    result.registration.data.setFullYear(now.getFullYear(), now.getMonth(), now.getDate())
+    result.lastActivity.data.setFullYear(now.getFullYear(), now.getMonth(), now.getDate())
+
+    return result
 }
 
 
