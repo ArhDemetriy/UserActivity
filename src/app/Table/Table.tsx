@@ -5,7 +5,7 @@ import './Table.scss';
 import { User } from './User/User';
 
 export const Table: React.FC = () => {
-    const users = useSelector((store: TState) => store.users, (left, right) => left.length === right.length)
+    const users = useSelector((store: TState) => store.users)
 
     return <table className="table">
         <caption className="table-caption">Users activity</caption>

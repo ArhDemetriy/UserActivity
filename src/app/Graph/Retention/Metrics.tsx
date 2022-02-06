@@ -12,7 +12,7 @@ export const Metrics: React.FC = () => {
         className="metrics"
     >
         <span>
-            {`Rolling Retention 7 day: ${(retention * 100).toFixed(1)} %`}
+            {`Rolling Retention 7 day: ${(retention * 100).toFixed(1)}%`}
         </span>
         <span>
             {`LifeTimes:`}
