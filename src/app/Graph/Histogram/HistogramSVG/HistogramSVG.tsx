@@ -1,24 +1,22 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { getRoundedToRank } from '../../../../controller/Engine/converters';
 import { TState } from '../../../../redux/store/reducer';
 
 interface HistogramSVGProps{
     height?: number
 }
 
-const RANK = 2
-
 export const HistogramSVG: React.FC<HistogramSVGProps> = ({ height = 500 }) => {
     const reduxMaxBin = useSelector((store: TState) => store.graph.histogram.maxBin || 0)
     const reduxBins = useSelector((store: TState) => store.graph.histogram.bins)
-    // const metrics = useSelector((store: TState) => store.graph.metrics)
-    if (!Array.isArray(reduxBins)) { return <svg /> }
+    const percentile10 = useSelector((store: TState) => store.graph.metrics.percentile10)
+    const percentile90 = useSelector((store: TState) => store.graph.metrics.percentile90)
 
-    const maxBin = getRoundedToRank(reduxMaxBin, RANK)
-    const bins = reduxBins.map(bin => getRoundedToRank(bin, RANK))
+    if (!Array.isArray(reduxBins) || !reduxBins.length || !reduxMaxBin) { return <svg /> }
 
-    // const mainHeight = Math.round(maxBin * 1.5 + 20)
+    const maxBin = reduxMaxBin
+    const bins = reduxBins
+
     const mainHeight = height
     const PADDING = 50
     const BAR_WIDTH = 10
@@ -30,9 +28,19 @@ export const HistogramSVG: React.FC<HistogramSVGProps> = ({ height = 500 }) => {
 
     /** генерирует столбцы гистограмы. Они растут вверх отступая от нижней границы экрана и боков на PADDING */
     function getRects() {
+        const bad = '#FF5151'
+        const good = '#5CDC70'
+
         const result = bins.map((bin, i) => {
+            let fill = 'inherit'
+            if (percentile10 >= i) {
+                fill = bad
+            } else if (percentile90 < i) {
+                fill = good
+            }
+
             const height = bin * maxHeight
-            return <g key={i}>
+            return <g fill={fill} key={i}>
                 <rect
                     x={`${i * xStep + PADDING}`}
                     y={`${mainHeight - height - PADDING}`}
@@ -89,10 +97,8 @@ export const HistogramSVG: React.FC<HistogramSVGProps> = ({ height = 500 }) => {
 
     function getSpline() {
         return <g stroke="rgba(74, 157, 255, .4)">
-
         </g>
     }
-
 
     return <svg
         width={`${mainWidth}`}
