@@ -11,7 +11,9 @@ export const App: React.FC = () => {
       <div className="app-data-table">
         <Table />
       </div>
-      <Graph />
+      <div className="app-data-graph">
+        <Graph />
+      </div>
     </div>
   </div>
 }

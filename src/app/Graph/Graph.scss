@@ -1,7 +1,11 @@
 .graph{
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    justify-content: flex-start;
+    align-items: flex-start;
     gap: Min(21px, 1.5rem);
+    &-histogram{
+        max-width: 100%;
+        overflow-x: scroll;
+    }
 }

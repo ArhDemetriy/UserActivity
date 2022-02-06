@@ -8,7 +8,9 @@ export const Graph: React.FC = () => {
         className="graph"
     >
         <Metrics />
-        <Histogram />
+        <div className='graph-histogram'>
+            <Histogram />
+        </div>
     </div>
 }
 

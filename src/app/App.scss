@@ -1,6 +1,6 @@
 .app{
   margin: 0 auto;
-  min-width: 770px;
+  margin-top: 2vh;
   display: flex;
   flex-direction: column;
   gap: Min(21px, 1.5rem);
@@ -9,9 +9,16 @@
     justify-content: space-between;
     align-items: flex-start;
     gap: Min(21px, 1.5rem);
+    max-width: 95vw;
     &-table{
       max-height: calc(96vh - Min(21px, 1.5rem) - 3rem);
       overflow-y: scroll;
+      flex-shrink: 0;
+    }
+    &-graph{
+      overflow-x: hidden;
+      // max-width: 50%;
+      flex-grow: 1;
     }
   }
 }
