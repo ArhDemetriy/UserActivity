@@ -21,8 +21,3 @@ export function convertToBdUsers(reduxUsers: TUser[]) {
 
     return bdUsers
 }
-
-export function getRoundedToRank(x: number, rank = 2) {
-    if (!rank) { return 0 }
-    return Math.round(x * 10 * rank) / (10 * rank)
-}
