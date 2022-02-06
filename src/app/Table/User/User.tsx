@@ -76,7 +76,7 @@ export const User: React.FC<IUserProps> = ({ index, requireCssClass }) => {
                 type="button"
                 onClick={() => { deleteUser(index) }}
             >
-                <img src="/img/trash.svg" alt="удалить" />
+                <img src="./img/trash.svg" alt="удалить" />
             </button>
         </td>
     </tr>
